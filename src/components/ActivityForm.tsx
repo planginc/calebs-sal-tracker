@@ -39,36 +39,33 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
       <div className="px-4 py-3 border-b border-gray-200">
         <h2 className="text-sm font-medium">Add New Sales Activity</h2>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-4 p-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-4 gap-4">
           <div>
-            <label className="block text-sm text-gray-500 mb-1">Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              className="w-full"
-              required
+              className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1">Contact Name</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
             <input
               type="text"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
               placeholder="Enter contact name"
-              className="w-full"
-              required
+              className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm text-gray-500 mb-1">Connected With</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Connected With</label>
             <select
               value={connectedWith}
               onChange={(e) => setConnectedWith(e.target.value)}
-              className="w-full"
-              required
+              className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             >
               <option value="">Select team member</option>
               {DEPARTMENTS.map((dept) => (
@@ -88,26 +85,28 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
                 type="checkbox"
                 checked={appointmentBooked}
                 onChange={(e) => setAppointmentBooked(e.target.checked)}
-                className="rounded text-blue-600 focus:ring-blue-500"
+                className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
-              <span className="text-sm text-gray-500">Appointment (+$10)</span>
+              <span className="text-sm text-gray-700">Appointment (+$10)</span>
             </label>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm text-gray-500 mb-1">Notes</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
           <textarea
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Add notes..."
-            className="w-full h-24"
+            rows={3}
+            className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          className="mt-4 w-full !bg-[#2563eb] hover:!bg-[#1d4ed8] text-white font-medium rounded-lg px-6 py-3 
+          focus:outline-none focus:ring-2 focus:ring-[#2563eb] focus:ring-offset-2 transition-colors duration-200"
         >
           Add Activity
         </button>

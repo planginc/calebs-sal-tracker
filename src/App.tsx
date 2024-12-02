@@ -92,31 +92,32 @@ function App() {
   type Tab = typeof tabs[number];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 bg-opacity-80">
+      <div className="bg-overlay"></div>
       <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         <h1 className="text-2xl font-semibold text-gray-900 mb-6">Caleb's SAL Tracker</h1>
         
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <h3 className="text-gray-600 mb-1">Monthly Earnings</h3>
-            <div className="text-2xl text-green-600 font-medium">${totalEarnings.toFixed(2)}</div>
-            <div className="text-sm text-gray-500">Total Commissions</div>
+          <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-500 mb-2">Monthly Earnings</h3>
+            <p className="text-2xl font-bold text-green-600">${totalEarnings.toFixed(2)}</p>
+            <p className="text-xs text-gray-500">Total Commissions</p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <h3 className="text-gray-600 mb-1">Appointment Revenue</h3>
-            <div className="text-2xl text-green-600 font-medium">${appointmentRevenue.toFixed(2)}</div>
-            <div className="text-sm text-gray-500">{totalAppointments} Appt</div>
+          <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-500 mb-2">Appointment Revenue</h3>
+            <p className="text-2xl font-bold text-green-600">${appointmentRevenue.toFixed(2)}</p>
+            <p className="text-xs text-gray-500">{totalAppointments} Appt</p>
           </div>
-          <div className="bg-white rounded-lg shadow-sm p-4">
-            <h3 className="text-gray-600 mb-1">Referral Revenue</h3>
-            <div className="text-2xl text-green-600 font-medium">$25.00</div>
-            <div className="text-sm text-gray-500">1 SAL</div>
+          <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
+            <h3 className="text-sm font-medium text-gray-500 mb-2">Referral Revenue</h3>
+            <p className="text-2xl font-bold text-green-600">$25.00</p>
+            <p className="text-xs text-gray-500">1 SAL</p>
           </div>
         </div>
 
         {/* Monthly Progress */}
-        <div className="bg-white rounded-lg shadow-sm p-4 mb-6">
+        <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6 mb-6">
           <MonthlyProgress 
             activities={activities} 
             calendarEvents={calendarEvents}
@@ -124,21 +125,14 @@ function App() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex space-x-1 p-4 bg-white rounded-lg shadow-sm mb-4">
+        <div className="flex space-x-1 p-4 bg-white/85 backdrop-blur-sm rounded-lg shadow-sm mb-4">
           {tabs.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab as Tab)}
               className={`
-                px-6 py-3 rounded-lg font-medium text-base transition-all duration-200
-                ${activeTab === tab 
-                  ? 'bg-blue-600 text-white shadow-md transform scale-105' 
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }
-                ${(tab === 'activities' || tab === 'referrals') && activeTab !== tab
-                  ? 'bg-blue-50 text-blue-600 hover:bg-blue-100'
-                  : ''
-                }
+                tab-button px-6 py-3 rounded-lg font-medium text-base transition-colors duration-200
+                ${activeTab === tab ? 'active' : ''}
               `}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -149,24 +143,24 @@ function App() {
         {/* Tab Content */}
         {activeTab === 'activities' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-lg shadow-sm">
+            <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
               <ActivityForm />
             </div>
 
-            <div className="bg-white rounded-lg shadow-sm">
+            <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
               <ActivityList 
                 activities={activities}
                 onEdit={handleEditActivity}
                 onDelete={handleDeleteActivity}
               />
             </div>
-            <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
               <ActivityStats activities={activities} />
             </div>
           </div>
         )}
         {activeTab === 'calendar' && (
-          <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
             <Calendar
               events={calendarEvents}
               onAddEvent={handleAddCalendarEvent}
@@ -176,7 +170,7 @@ function App() {
           </div>
         )}
         {activeTab === 'referrals' && (
-          <div className="bg-white rounded-lg shadow-sm p-4">
+          <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
             <ReferralsTab />
           </div>
         )}
