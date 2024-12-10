@@ -32,16 +32,24 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Create new activity with all required fields
+    const newActivity: Activity = {
+      id: Date.now().toString(),
+      date: formData.date,
+      contact: formData.contactName,
+      connectedWith: formData.connectedWith,
+      appointmentBooked: formData.appointment,
+      notes: formData.notes,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Submit the new activity
     if (onSubmit) {
-      onSubmit({
-        id: Date.now().toString(),
-        date: formData.date,
-        contact: formData.contactName,
-        connectedWith: formData.connectedWith,
-        appointmentBooked: formData.appointment,
-        notes: formData.notes,
-      });
+      onSubmit(newActivity);
     }
+
     // Clear form and draft after successful submission
     setFormData({
       date: new Date().toISOString().split('T')[0],

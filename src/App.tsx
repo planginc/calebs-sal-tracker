@@ -52,6 +52,10 @@ function App() {
     localStorage.setItem('sal-tracker-calendar', JSON.stringify(calendarEvents));
   }, [calendarEvents]);
 
+  const handleAddActivity = (newActivity: Activity) => {
+    setActivities(prevActivities => [...prevActivities, newActivity]);
+  };
+
   const handleEditActivity = (editedActivity: Activity) => {
     setActivities(prevActivities =>
       prevActivities.map(activity =>
@@ -160,7 +164,7 @@ function App() {
         {activeTab === 'activities' && (
           <div className="space-y-6">
             <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
-              <ActivityForm />
+              <ActivityForm onSubmit={handleAddActivity} />
             </div>
 
             <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">

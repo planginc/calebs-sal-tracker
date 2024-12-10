@@ -28,13 +28,13 @@ export const DEPARTMENTS: Department[] = [
 
 export interface Activity {
   id: string;
+  date: string;
   contact: string;
   connectedWith: string;
   appointmentBooked: boolean;
-  date: string;
-  notes?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  notes: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ActivityStats {
@@ -49,3 +49,5 @@ export const PAYMENT_RULES = {
   BASE_SAL_PAYMENT: 25,
   APPOINTMENT_BONUS: 10,
 } as const;
+
+export const DEPARTMENTS_LIST = ['Matt', 'Other'] as const;
