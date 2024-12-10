@@ -41,8 +41,35 @@ function App() {
     return savedEvents ? JSON.parse(savedEvents) : [];
   });
 
-  const [currentProgress, setCurrentProgress] = useState(15);
-  const monthlyGoal = 30;
+  const calculateRevenues = () => {
+    const currentMonth = new Date().getMonth();
+    const currentYear = new Date().getFullYear();
+    
+    const monthlyActivities = activities.filter(activity => {
+      const activityDate = new Date(activity.date);
+      return activityDate.getMonth() === currentMonth && 
+             activityDate.getFullYear() === currentYear;
+    });
+
+    const appointmentRevenue = monthlyActivities
+      .filter(activity => activity.appointmentBooked)
+      .length * 10; // $10 per appointment
+
+    const referralCount = monthlyActivities.length; // Each activity counts as a SAL
+    const referralRevenue = referralCount * 25; // $25 per SAL
+
+    const totalEarnings = appointmentRevenue + referralRevenue;
+
+    return {
+      appointmentRevenue,
+      appointmentCount: monthlyActivities.filter(activity => activity.appointmentBooked).length,
+      referralRevenue,
+      referralCount,
+      totalEarnings
+    };
+  };
+
+  const revenues = calculateRevenues();
 
   useEffect(() => {
     localStorage.setItem('sal-tracker-activities', JSON.stringify(activities));
@@ -103,11 +130,6 @@ function App() {
       .map(event => new Date(event.date));
   };
 
-  const totalAppointments = activities.filter(a => a.appointmentBooked).length;
-  const appointmentRevenue = totalAppointments * 10;
-  const referralRevenue = 25; // Fixed at $25 per referral
-  const totalEarnings = appointmentRevenue + referralRevenue;
-
   const tabs = ['activities', 'calendar', 'referrals'] as const;
   type Tab = typeof tabs[number];
 
@@ -121,18 +143,18 @@ function App() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Monthly Earnings</h3>
-            <p className="text-2xl font-bold text-green-600">${totalEarnings.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-green-600">${revenues.totalEarnings.toFixed(2)}</p>
             <p className="text-xs text-gray-500">Total Commissions</p>
           </div>
           <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Appointment Revenue</h3>
-            <p className="text-2xl font-bold text-green-600">${appointmentRevenue.toFixed(2)}</p>
-            <p className="text-xs text-gray-500">{totalAppointments} Appt</p>
+            <p className="text-2xl font-bold text-green-600">${revenues.appointmentRevenue.toFixed(2)}</p>
+            <p className="text-xs text-gray-500">{revenues.appointmentCount} Appt</p>
           </div>
           <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Referral Revenue</h3>
-            <p className="text-2xl font-bold text-green-600">$25.00</p>
-            <p className="text-xs text-gray-500">1 SAL</p>
+            <p className="text-2xl font-bold text-green-600">${revenues.referralRevenue.toFixed(2)}</p>
+            <p className="text-xs text-gray-500">{revenues.referralCount} SAL</p>
           </div>
         </div>
 
