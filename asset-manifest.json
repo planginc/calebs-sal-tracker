@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/calebs-sal-tracker/static/css/main.529b7744.css",
-    "main.js": "/calebs-sal-tracker/static/js/main.8ea0a299.js",
-    "static/js/453.32dc38f9.chunk.js": "/calebs-sal-tracker/static/js/453.32dc38f9.chunk.js",
+    "main.css": "/calebs-sal-tracker/static/css/main.a542d77a.css",
+    "main.js": "/calebs-sal-tracker/static/js/main.79fff55e.js",
+    "static/js/453.009f76b0.chunk.js": "/calebs-sal-tracker/static/js/453.009f76b0.chunk.js",
     "index.html": "/calebs-sal-tracker/index.html",
-    "main.529b7744.css.map": "/calebs-sal-tracker/static/css/main.529b7744.css.map",
-    "main.8ea0a299.js.map": "/calebs-sal-tracker/static/js/main.8ea0a299.js.map",
-    "453.32dc38f9.chunk.js.map": "/calebs-sal-tracker/static/js/453.32dc38f9.chunk.js.map"
+    "main.a542d77a.css.map": "/calebs-sal-tracker/static/css/main.a542d77a.css.map",
+    "main.79fff55e.js.map": "/calebs-sal-tracker/static/js/main.79fff55e.js.map",
+    "453.009f76b0.chunk.js.map": "/calebs-sal-tracker/static/js/453.009f76b0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.529b7744.css",
-    "static/js/main.8ea0a299.js"
+    "static/css/main.a542d77a.css",
+    "static/js/main.79fff55e.js"
   ]
 }
