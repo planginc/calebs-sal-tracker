@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ActivityForm } from './components/ActivityForm';
 import { ActivityList } from './components/ActivityList';
 import { ActivityStats } from './components/ActivityStats';
@@ -20,21 +20,37 @@ interface CalendarEvent {
 
 function App() {
   const [activeTab, setActiveTab] = useState<Tab>('activities');
-  const [activities, setActivities] = useState<Activity[]>([
-    {
-      id: '1',
-      date: new Date().toISOString(),
-      contact: 'John Doe',
-      connectedWith: 'Matt',
-      appointmentBooked: false,
-      notes: 'Initial contact with client',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    }
-  ]);
-  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>([]);
+  const [activities, setActivities] = useState<Activity[]>(() => {
+    const savedActivities = localStorage.getItem('sal-tracker-activities');
+    return savedActivities ? JSON.parse(savedActivities) : [
+      {
+        id: '1',
+        date: new Date().toISOString(),
+        contact: 'John Doe',
+        connectedWith: 'Matt',
+        appointmentBooked: false,
+        notes: 'Initial contact with client',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      }
+    ];
+  });
+
+  const [calendarEvents, setCalendarEvents] = useState<CalendarEvent[]>(() => {
+    const savedEvents = localStorage.getItem('sal-tracker-calendar');
+    return savedEvents ? JSON.parse(savedEvents) : [];
+  });
+
   const [currentProgress, setCurrentProgress] = useState(15);
   const monthlyGoal = 30;
+
+  useEffect(() => {
+    localStorage.setItem('sal-tracker-activities', JSON.stringify(activities));
+  }, [activities]);
+
+  useEffect(() => {
+    localStorage.setItem('sal-tracker-calendar', JSON.stringify(calendarEvents));
+  }, [calendarEvents]);
 
   const handleEditActivity = (editedActivity: Activity) => {
     setActivities(prevActivities =>

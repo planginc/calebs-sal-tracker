@@ -1,37 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Activity, DEPARTMENTS } from '../types/activity';
 
 interface ActivityFormProps {
   onSubmit?: (activity: Activity) => void;
 }
 
+interface ActivityFormData {
+  date: string;
+  contactName: string;
+  connectedWith: string;
+  notes: string;
+  appointment: boolean;
+}
+
 export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
-  // Get today's date in YYYY-MM-DD format
-  const today = new Date().toISOString().split('T')[0];
-  
-  const [date, setDate] = useState(today);
-  const [contact, setContact] = useState('');
-  const [connectedWith, setConnectedWith] = useState('');
-  const [appointmentBooked, setAppointmentBooked] = useState(false);
-  const [notes, setNotes] = useState('');
+  const [formData, setFormData] = useState<ActivityFormData>(() => {
+    const savedForm = localStorage.getItem('sal-tracker-form-draft');
+    return savedForm ? JSON.parse(savedForm) : {
+      date: new Date().toISOString().split('T')[0],
+      contactName: '',
+      connectedWith: '',
+      notes: '',
+      appointment: false
+    };
+  });
+
+  // Save form draft as user types
+  useEffect(() => {
+    localStorage.setItem('sal-tracker-form-draft', JSON.stringify(formData));
+  }, [formData]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (onSubmit) {
       onSubmit({
         id: Date.now().toString(),
-        date,
-        contact,
-        connectedWith,
-        appointmentBooked,
-        notes,
+        date: formData.date,
+        contact: formData.contactName,
+        connectedWith: formData.connectedWith,
+        appointmentBooked: formData.appointment,
+        notes: formData.notes,
       });
     }
-    // Reset form except date
-    setContact('');
-    setConnectedWith('');
-    setAppointmentBooked(false);
-    setNotes('');
+    // Clear form and draft after successful submission
+    setFormData({
+      date: new Date().toISOString().split('T')[0],
+      contactName: '',
+      connectedWith: '',
+      notes: '',
+      appointment: false
+    });
+    localStorage.removeItem('sal-tracker-form-draft');
   };
 
   return (
@@ -45,8 +64,8 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
             <input
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={formData.date}
+              onChange={(e) => setFormData({ ...formData, date: e.target.value })}
               className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
           </div>
@@ -54,8 +73,8 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
             <label className="block text-sm font-medium text-gray-700 mb-1">Contact Name</label>
             <input
               type="text"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
+              value={formData.contactName}
+              onChange={(e) => setFormData({ ...formData, contactName: e.target.value })}
               placeholder="Enter contact name"
               className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             />
@@ -63,8 +82,8 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Connected With</label>
             <select
-              value={connectedWith}
-              onChange={(e) => setConnectedWith(e.target.value)}
+              value={formData.connectedWith}
+              onChange={(e) => setFormData({ ...formData, connectedWith: e.target.value })}
               className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
             >
               <option value="">Select team member</option>
@@ -83,8 +102,8 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
             <label className="flex items-center space-x-2">
               <input
                 type="checkbox"
-                checked={appointmentBooked}
-                onChange={(e) => setAppointmentBooked(e.target.checked)}
+                checked={formData.appointment}
+                onChange={(e) => setFormData({ ...formData, appointment: e.target.checked })}
                 className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
               />
               <span className="text-sm text-gray-700">Appointment (+$10)</span>
@@ -95,8 +114,8 @@ export const ActivityForm: React.FC<ActivityFormProps> = ({ onSubmit }) => {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
           <textarea
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
+            value={formData.notes}
+            onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             placeholder="Add notes..."
             rows={3}
             className="bg-white/95 w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"

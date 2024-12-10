@@ -155,7 +155,10 @@ export const Calendar: React.FC<CalendarProps> = ({
   onEditEvent
 }) => {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
+    const savedDate = localStorage.getItem('sal-tracker-selected-date');
+    return savedDate ? new Date(savedDate) : new Date();
+  });
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
@@ -165,6 +168,19 @@ export const Calendar: React.FC<CalendarProps> = ({
     type: 'event',
     notes: ''
   });
+
+  useEffect(() => {
+    localStorage.setItem('sal-tracker-selected-date', selectedDate.toISOString());
+  }, [selectedDate]);
+
+  useEffect(() => {
+    if (events.length > 0) {
+      const parsedEvents = events.map(event => ({
+        ...event,
+        date: new Date(event.date)
+      }));
+    }
+  }, [events]);
 
   const allHolidays = [...HOLIDAYS_2024, ...HOLIDAYS_2025];
 
