@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/calebs-sal-tracker/static/css/main.62543a6a.css",
-    "main.js": "/calebs-sal-tracker/static/js/main.6218bbe9.js",
+    "main.css": "/calebs-sal-tracker/static/css/main.a7bb8d6b.css",
+    "main.js": "/calebs-sal-tracker/static/js/main.d5d54960.js",
     "static/js/453.009f76b0.chunk.js": "/calebs-sal-tracker/static/js/453.009f76b0.chunk.js",
     "index.html": "/calebs-sal-tracker/index.html",
-    "main.62543a6a.css.map": "/calebs-sal-tracker/static/css/main.62543a6a.css.map",
-    "main.6218bbe9.js.map": "/calebs-sal-tracker/static/js/main.6218bbe9.js.map",
+    "main.a7bb8d6b.css.map": "/calebs-sal-tracker/static/css/main.a7bb8d6b.css.map",
+    "main.d5d54960.js.map": "/calebs-sal-tracker/static/js/main.d5d54960.js.map",
     "453.009f76b0.chunk.js.map": "/calebs-sal-tracker/static/js/453.009f76b0.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.62543a6a.css",
-    "static/js/main.6218bbe9.js"
+    "static/css/main.a7bb8d6b.css",
+    "static/js/main.d5d54960.js"
   ]
 }
