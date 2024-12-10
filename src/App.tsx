@@ -213,7 +213,7 @@ function App() {
         )}
         {activeTab === 'referrals' && (
           <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
-            <ReferralsTab />
+            <ReferralsTab activities={activities} />
           </div>
         )}
       </div>
