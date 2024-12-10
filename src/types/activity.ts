@@ -29,10 +29,12 @@ export const DEPARTMENTS: Department[] = [
 export interface Activity {
   id: string;
   date: string;
+  type: 'referral' | 'appointment';
   contact: string;
   connectedWith: string;
   appointmentBooked: boolean;
-  notes: string;
+  revenue?: number;
+  notes?: string;
   createdAt: string;
   updatedAt: string;
 }

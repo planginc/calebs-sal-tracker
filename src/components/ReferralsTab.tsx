@@ -6,70 +6,65 @@ interface ReferralsTabProps {
   activities: Activity[];
 }
 
+interface PieChartData {
+  name: string;
+  value: number;
+}
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
+
 export const ReferralsTab: React.FC<ReferralsTabProps> = ({ activities }) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
-  // Filter activities for current month
   const monthlyActivities = activities.filter(activity => {
     const activityDate = new Date(activity.date);
-    return activityDate.getMonth() === currentMonth && 
-           activityDate.getFullYear() === currentYear;
+    return activityDate.getMonth() === currentMonth && activityDate.getFullYear() === currentYear;
   });
 
-  // Calculate distribution by team member
-  const distribution = monthlyActivities.reduce((acc, activity) => {
-    const member = activity.connectedWith || 'Unassigned';
-    acc[member] = (acc[member] || 0) + 1;
+  const distribution = monthlyActivities.reduce<Record<string, number>>((acc, activity) => {
+    if (activity.connectedWith) {
+      acc[activity.connectedWith] = (acc[activity.connectedWith] || 0) + 1;
+    }
     return acc;
-  }, {} as Record<string, number>);
+  }, {});
 
-  // Prepare data for pie chart
-  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-  const pieData = Object.entries(distribution).map(([name, value], index) => ({
+  const totalActivities = monthlyActivities.length;
+
+  const pieData: PieChartData[] = Object.entries(distribution).map(([name, value]) => ({
     name,
     value,
-    color: COLORS[index % COLORS.length]
   }));
 
-  // Calculate total activities and percentages
-  const totalActivities = monthlyActivities.length;
+  const renderCustomLabel = ({ name, percent }: { name: string; percent: number }) => {
+    return `${name} (${(percent * 100).toFixed(0)}%)`;
+  };
 
   return (
     <div className="space-y-6">
-      <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
-        <h2 className="text-lg font-medium mb-4">Referral Distribution Overview</h2>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-6">Referral Distribution Overview</h2>
         
-        {/* Distribution Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Total Activities This Month</h3>
-            <p className="text-2xl font-bold">{totalActivities}</p>
-          </div>
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-2">Total Revenue</h3>
-            <p className="text-2xl font-bold text-green-600">
-              ${(totalActivities * 25).toFixed(2)}
-            </p>
-          </div>
+        <div className="mb-8">
+          <div className="text-gray-600 mb-1">Total Activities This Month</div>
+          <div className="text-3xl font-bold">{totalActivities}</div>
         </div>
 
-        {/* Pie Chart */}
-        <div className="h-[300px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
+        <div style={{ width: '100%', height: 300 }}>
+          <ResponsiveContainer>
             <PieChart>
               <Pie
                 data={pieData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                label={renderCustomLabel}
                 outerRadius={100}
                 fill="#8884d8"
                 dataKey="value"
               >
                 {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
@@ -77,29 +72,34 @@ export const ReferralsTab: React.FC<ReferralsTabProps> = ({ activities }) => {
             </PieChart>
           </ResponsiveContainer>
         </div>
+      </div>
 
-        {/* Detailed Breakdown */}
-        <div className="mt-6">
-          <h3 className="text-sm font-medium text-gray-500 mb-3">Detailed Breakdown</h3>
-          <div className="space-y-2">
-            {Object.entries(distribution).map(([member, count], index) => (
-              <div key={member} className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <div 
-                    className="w-3 h-3 rounded-full mr-2" 
-                    style={{ backgroundColor: COLORS[index % COLORS.length] }}
-                  />
-                  <span className="text-sm">{member}</span>
-                </div>
-                <div className="text-sm">
-                  <span className="font-medium">{count}</span>
-                  <span className="text-gray-500 ml-1">
-                    ({((count / totalActivities) * 100).toFixed(1)}%)
-                  </span>
-                </div>
+      <div className="bg-white p-6 rounded-lg shadow">
+        <h2 className="text-xl font-semibold mb-6">Detailed Distribution</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {Object.entries(distribution).map(([teamMember]) => (
+            <div key={teamMember} className="space-y-2">
+              <h3 className="text-lg font-medium mb-2">{teamMember}</h3>
+              <div className="flex justify-between items-center text-gray-600">
+                <span>Referrals:</span>
+                <span className="font-medium text-gray-900">{
+                  monthlyActivities.filter(a => 
+                    a.connectedWith === teamMember && 
+                    a.type === 'referral'
+                  ).length
+                }</span>
               </div>
-            ))}
-          </div>
+              <div className="flex justify-between items-center text-gray-600">
+                <span>Appointments:</span>
+                <span className="font-medium text-gray-900">{
+                  monthlyActivities.filter(a => 
+                    a.connectedWith === teamMember && 
+                    a.type === 'appointment'
+                  ).length
+                }</span>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

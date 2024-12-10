@@ -19,7 +19,11 @@ interface CalendarEvent {
 }
 
 function App() {
-  const [activeTab, setActiveTab] = useState<Tab>('activities');
+  const [activeTab, setActiveTab] = useState<string>(() => {
+    const savedTab = localStorage.getItem('sal-tracker-active-tab');
+    return savedTab || 'activities';
+  });
+
   const [activities, setActivities] = useState<Activity[]>(() => {
     const savedActivities = localStorage.getItem('sal-tracker-activities');
     return savedActivities ? JSON.parse(savedActivities) : [
@@ -74,6 +78,10 @@ function App() {
   useEffect(() => {
     localStorage.setItem('sal-tracker-activities', JSON.stringify(activities));
   }, [activities]);
+
+  useEffect(() => {
+    localStorage.setItem('sal-tracker-active-tab', activeTab);
+  }, [activeTab]);
 
   useEffect(() => {
     localStorage.setItem('sal-tracker-calendar', JSON.stringify(calendarEvents));
@@ -133,6 +141,29 @@ function App() {
   const tabs = ['activities', 'calendar', 'referrals'] as const;
   type Tab = typeof tabs[number];
 
+  const departments = [
+    {
+      name: 'MemberClicks',
+      experts: ['Rory', 'Cam']
+    },
+    {
+      name: 'A2Z Events',
+      experts: ['Jon', 'Jeff']
+    },
+    {
+      name: 'RegTech (GTR)',
+      experts: ['Matt']
+    },
+    {
+      name: "Add-on's and Extensions",
+      experts: ['Cindy', 'Haley']
+    },
+    {
+      name: 'ThreeSixty',
+      experts: ['Mike']
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-gray-50 bg-opacity-80">
       <div className="bg-overlay"></div>
@@ -186,7 +217,10 @@ function App() {
         {activeTab === 'activities' && (
           <div className="space-y-6">
             <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
-              <ActivityForm onSubmit={handleAddActivity} />
+              <ActivityForm 
+                onSubmit={handleAddActivity}
+                departments={departments}
+              />
             </div>
 
             <div className="bg-white/85 backdrop-blur-sm rounded-lg shadow-sm p-6">
